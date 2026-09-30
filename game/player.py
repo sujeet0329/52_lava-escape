@@ -22,10 +22,13 @@ class Player:
         self.rect.y += int(self.vel_y)
         self.on_ground = False
         for p in platforms:
-            if self.rect.colliderect(p) and self.vel_y > 0 and self.rect.bottom <= p.bottom + 10:
+            if self.rect.colliderect(p) and self.vel_y > 0 and (self.rect.bottom - self.vel_y <= p.top + 2):
                 self.rect.bottom = p.top
                 self.vel_y = 0
                 self.on_ground = True
+                if hasattr(p, "on_player_land"):
+                    p.on_player_land(self)
+                break
 
     def draw(self, screen, cam_y):
         dr = self.rect.move(0, -int(cam_y))
